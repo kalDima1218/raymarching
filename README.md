@@ -35,5 +35,4 @@ License
 LGPL
 
 
-**If you have any ideas on how to improve the algorithm, write to issues
-Free Software, Hell Yeah!**
+**If you have any ideas on how to improve the algorithm, write to issues**
