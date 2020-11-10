@@ -26,8 +26,8 @@ g++ -o main example.cpp lodepng.cpp -pthread//to run it on linux: ./main
 
 ### Todos
 
- - Write MORE Tests
- - Add Night Mode
+ - GPU support
+ - Write custom .png saving
 
 License
 ----
