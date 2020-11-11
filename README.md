@@ -19,6 +19,7 @@ For .png files saving, i'm used: https://github.com/lvandeve/lodepng, so I INCLU
   - GPU support
   - Write custom .png saving
 
+# Education
 ### Compiling
 If you have a hypothetical your_program.cpp that #includes and uses raymarching.h, you can build as follows:
 ```sh
@@ -28,11 +29,6 @@ Example compiling for linux:
 ```sh
 g++ -o main example.cpp -pthread//to run it on linux: ./main
 ```
-
-### Todos
-
- - GPU support
- - Write custom .png saving
 
 License
 ----
