@@ -10,9 +10,9 @@ For .png files saving, i'm used: https://github.com/lvandeve/lodepng, so I INCLU
   - ASCII arts
   - Image saving in .png
   - Pre-created base figure classes
-  - You can create your ouw figure (fractales too!)
+  - You can create your own figure (fractales too!)
   - You can create fractales
-  - Automatic selection of the optimal number of threads
+  - Automatic selection of the optimal number of threads (provided in example)
 
 ### Compiling
 If you have a hypothetical your_program.cpp that #includes and uses raymarching.h, you can build as follows:
@@ -35,4 +35,4 @@ License
 LGPL
 
 
-**If you have any ideas on how to improve the algorithm, write to issues**
+**If you have any ideas on how to improve the algorithm, write to issues or on my email: kalugin180806@gmail.com**
