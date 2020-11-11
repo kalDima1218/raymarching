@@ -17,11 +17,11 @@ For .png files saving, i'm used: https://github.com/lvandeve/lodepng, so I INCLU
 ### Compiling
 If you have a hypothetical your_program.cpp that #includes and uses raymarching.h, you can build as follows:
 ```sh
-g++ your_program.cpp lodepng.cpp -pthread
+g++ your_program.cpp -pthread
 ```
 Example compiling for linux:
 ```sh
-g++ -o main example.cpp lodepng.cpp -pthread//to run it on linux: ./main
+g++ -o main example.cpp -pthread//to run it on linux: ./main
 ```
 
 ### Todos
