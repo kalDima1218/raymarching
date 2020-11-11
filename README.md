@@ -13,6 +13,11 @@ For .png files saving, i'm used: https://github.com/lvandeve/lodepng, so I INCLU
   - You can create your own figure (fractales too!)
   - You can create fractales
   - Automatic selection of the optimal number of threads (provided in example)
+  
+### Todos
+
+  - GPU support
+  - Write custom .png saving
 
 ### Compiling
 If you have a hypothetical your_program.cpp that #includes and uses raymarching.h, you can build as follows:
