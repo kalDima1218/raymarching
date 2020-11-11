@@ -1,5 +1,5 @@
 /*
-    Raymarching lib. Library to render amazing scenes in high resolution
+    Raymarching lib. Vector engine library for rendering scenes in high resolution.
     Copyright © 2020 Dmitry Kalugin
 
     This library is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 Email to contact:kalugin180806@gmail.com
 
 That's all there is to it!*/
-//My code starts at 7529
+//My code starts at 7019
 #include<cmath>
 #include<thread>
 #include<fstream>
