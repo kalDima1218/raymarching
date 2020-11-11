@@ -1,4 +1,6 @@
-/*                  GNU LESSER GENERAL PUBLIC LICENSE
+/*                  Copyright © 2020 Dmitry Kalugin
+
+                   GNU LESSER GENERAL PUBLIC LICENSE
                        Version 2.1, February 1999
 
  Copyright (C) 1991, 1999 Free Software Foundation, Inc.
