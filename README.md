@@ -10,8 +10,8 @@ For .png files saving, i'm used: https://github.com/lvandeve/lodepng, so I INCLU
   - ASCII arts
   - Image saving in .png
   - Pre-created base figure classes
-  - You can create your own figure (fractales too!)
-  - You can create fractales
+  - You can create your own figure (fractals too!)
+  - You can create fractals
   - Automatic selection of the optimal number of threads (provided in example)
   
 ### Todos
