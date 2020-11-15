@@ -1,13 +1,12 @@
-/*
-    Raymarching lib. Vector engine library for rendering scenes in high resolution.
+/*  Raymarching lib. Vector engine library for rendering scenes in high resolution.
     Copyright © 2020 Dmitry Kalugin
 
-    This library is free software; you can redistribute it and/or
+    Raymarching lib is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
+    Raymarching lib is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
@@ -17,10 +16,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
     USA
 
-Email to contact:kalugin180806@gmail.com
-
-That's all there is to it!*/
-//My code starts at 7019
+Email to contact:kalugin180806@gmail.com*/
+//My code starts at 7037
 #include<cmath>
 #include<thread>
 #include<fstream>
@@ -7043,6 +7040,10 @@ namespace lodepng {
 //double h = max(0, 0.5 + 0.5 * (b - a) / k);
 //return max(a, b, h) - k * h * (1 - h);
 //}
+
+int get_threads(int w, int h){
+    return pow(2, int((log2l(w * h) / 2 + 1) / 2 + 1));//for pc: 2^((n + 1) / 2 + 1), n = log2l(w * h) / 2 + 1) / 2 => 2^((log2l(w * h) / 2 + 1) / 2 + 1)
+}
 
 class SDF{
 public:
