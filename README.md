@@ -49,7 +49,6 @@ LGPL
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
     USA
-Email to contact: kalugin180806@gmail.com
 
 
 **If you have any ideas on how to improve the algorithm, write to issues or on my email: kalugin180806@gmail.com**
