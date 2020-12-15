@@ -2,7 +2,7 @@
 Raymarching is a technology for rendering scenes. It is interesting because the characteristics and positions of objects are described by formulas, which means you can render scenes in any resolution
 
 # ATTENTION!!! 
-For .png files saving, i'm used: https://github.com/lvandeve/lodepng, so I INCLUDED IT IN MY LIBRARY! If you using it too, you may not include it
+For .png files saving, i'm used: https://github.com/lvandeve/lodepng
 
 # Features!
 
