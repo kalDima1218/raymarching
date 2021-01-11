@@ -1,10 +1,10 @@
 # Raymarching
 Raymarching is a technology for rendering scenes. It is interesting because the characteristics and positions of objects are described by formulas, which means you can render scenes in any resolution
 
-# ATTENTION!!! 
+## ATTENTION!!! 
 For .png files saving, i'm used: https://github.com/lvandeve/lodepng
 
-# Features!
+## Features!
 
   - Multithreading
   - ASCII arts
@@ -14,12 +14,12 @@ For .png files saving, i'm used: https://github.com/lvandeve/lodepng
   - You can create fractals
   - Automatic selection of the optimal number of threads (provided in example)
   
-### Todos
+## Todos
 
   - GPU support
   - Write custom .png saving
 
-# Education
+## Education
 ### Compiling
 If you have a hypothetical your_program.cpp that #includes and uses raymarching.h, you can build as follows:
 ```sh
@@ -30,10 +30,10 @@ Example compiling for linux:
 g++ -o main example.cpp -pthread//to run it on linux: ./main
 ```
 
-License
+## License
 ----
 
-LGPL
+LGPL-v2.1
 
     Raymarching lib. Vector engine library for rendering scenes in high resolution.
                    Copyright © 2020 Dmitry Kalugin
