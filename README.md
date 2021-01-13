@@ -13,6 +13,7 @@ For .png files saving, i'm used: https://github.com/lvandeve/lodepng
   - You can create your own figure (fractals too!)
   - You can create fractals
   - Automatic selection of the optimal number of threads (provided in example)
+  - DESIGNED AND CODED IN RUSSIA(🇷🇺)
   
 ## Todos
 
