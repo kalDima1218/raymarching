@@ -1,4 +1,5 @@
 #include<iostream>
+#include"lodepng.h"
 #include "raymarching.h"
 
 void console_rendering(int w, int h, int threads, SDF* s){
