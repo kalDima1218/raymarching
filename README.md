@@ -20,14 +20,14 @@ For .png files saving, i'm used: https://github.com/lvandeve/lodepng
   - GPU support
   - Write custom .png saving
 
-### Compiling
+## Compiling
 If you have a your_program.cpp that #includes and uses raymarching.h, you can build as follows:
 ```sh
 g++ your_program.cpp -pthread
 ```
 Example compiling and running (linux):
 ```sh
-g++ -o main example.cpp -pthread && ./main
+g++ -o main main.cpp -pthread; ./main
 ```
 
 ## License
