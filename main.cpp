@@ -9,8 +9,8 @@ using namespace std;
 void image_rendering(SDF* s) {
     int w = 128;
     int h = 128;
-    float *cam_pos = new float[3]{-2, 0, 0};
-    Scene scene(w, h, 0, -1.4, cam_pos, s);
+    float *cam_pos = new float[3]{-2, -2, 0};
+    Scene scene(w, h, 0, -0.7, cam_pos, s);
     scene.render();
     const char* filename = "test.png";
     vector<unsigned char> image(4*w*h);
@@ -22,11 +22,8 @@ void image_rendering(SDF* s) {
             image[4*(i*w + j) + 3] = 255;
         }
     }
-    //Encode the image
-    unsigned error = lodepng::encode(filename, image, w, h);
-
-    //if there's an error, display it
-    if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
+    lodepng::encode(filename, image, w, h);
+    delete[] cam_pos;
 }
 
 void console_rendering(SDF* s){
@@ -38,16 +35,12 @@ void console_rendering(SDF* s){
     for(int i = 0; i < w; i++){
         clear+="  ";
     }
-    float *cam_pos = new float[3];//{-2, 0, 0};
-    cam_pos[0] = -2;
-    cam_pos[1] = 0;
-    cam_pos[2] = 0;
-    Scene scene(w, h, 0, 0, cam_pos, s);
+    float *cam_pos = new float[3]{-2, -2, 0};
+    Scene scene(w, h, 0, -0.7, cam_pos, s);
     int k = 0;
     for(int i = 0; i < 1; ++i){
         system("clear");
         //system("cls");
-        //scene.thread_rendering(threads);
         scene.render();
         for(int i = 0; i < 15; i++) {
             cout << endl;
@@ -55,7 +48,6 @@ void console_rendering(SDF* s){
         scene.set_preset(cam_pos, 0, k*0.1);
         for(int i = 0; i < h; i++) {
             for(int j = 0; j < w; j++) {
-                //cout << (int)scene.image[i][j] << " ";
                 line += chars[int(round(scene.image[i][j] / 10.2))];
                 line += chars[int(round(scene.image[i][j] / 10.2))];
             }
@@ -66,22 +58,16 @@ void console_rendering(SDF* s){
         }
         k++;
     }
+    delete[] cam_pos;
 }
 
 int main(){
-
-//    int k = 2;
-//    int threads = pow(2, int((log2f(w * h) / 2 + 1) / 2 + 1));
-//
     SDF *s[3];
-    Sphere sph = Sphere(0, 0, 0, 1, 1, 1, 0, 0, 0.65);
-    Cube cu = Cube(0, 0, 0, 1, 1, 1, 0, 0, 1);
-    s[0] = &sph;
-    s[1] = &cu;
-    Subtraction obj = Subtraction(s[1], s[0]);
-    s[2] = &obj;
+    s[0] = new Sphere(0, 0, 0, 1, 1, 1, 0, 0, 0.65);
+    s[1] = new Cube(0, 0, 0, 1, 1, 1, 0, 0, 1);
+    s[2] = new Subtraction(s[1], s[0]);
 
-    //console_rendering(s[2]);
+    console_rendering(s[2]);
     image_rendering(s[2]);
     return 0;
 

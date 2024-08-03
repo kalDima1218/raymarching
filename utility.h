@@ -13,7 +13,9 @@ void inplace_rotate_vector(float *vec, float a, float b){
     res[0] = vec[0]*cos(a)*cos(b) - vec[2]*sin(a)*cos(b) + vec[1]*sin(b);
     res[1] = -vec[0]*cos(a)*sin(b) + vec[2]*sin(a)*sin(b) + vec[1]*cos(b);
     res[2] = vec[0]*sin(a) + vec[2]*cos(a);
-    *vec = *res;
+    vec[0] = res[0];
+    vec[1] = res[1];
+    vec[2] = res[2];
     delete[] res;
 }
 

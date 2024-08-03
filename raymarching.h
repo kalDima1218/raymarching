@@ -7,7 +7,7 @@ private:
     int _width;
     int _height;
     float _light_pos[3] = {-5, 5, 0};
-    float *_cam_pos;
+    float *_cam_pos = new float[3];
     float *_cam_dir = new float[3];
     float *_pix_right_vec = new float[3];
     float *_pix_down_vec = new float[3];
@@ -44,7 +44,9 @@ public:
 
     // a вокруг оси y, b вокруг оси z
     void set_preset(float *cam_pos, float a, float b){
-        _cam_pos = cam_pos;
+        _cam_pos[0] = cam_pos[0];
+        _cam_pos[1] = cam_pos[1];
+        _cam_pos[2] = cam_pos[2];
         _cam_dir[0] = 1;
         _cam_dir[1] = 0;
         _cam_dir[2] = 0;
@@ -57,7 +59,9 @@ public:
         inplace_rotate_vector(_cam_dir, a, b);
         inplace_rotate_vector(_pix_right_vec, a, b);
         inplace_rotate_vector(_pix_down_vec, a, b);
-        *_display_center = *_cam_pos;
+        _display_center[0] = _cam_pos[0];
+        _display_center[1] = _cam_pos[1];
+        _display_center[2] = _cam_pos[2];
         inplace_sum_vectors(_display_center, _cam_dir);
     }
 
@@ -89,7 +93,7 @@ public:
                     light_dir[2] = _light_pos[2] - pos[2];
                     inplace_normalize(light_dir);
                     float *normal = _sdf->get_normal(pos);
-                    image[int(row + (_height / 2))][int(col + (_width / 2))] = (light_dir[0]*normal[0] + light_dir[1]*normal[1] + light_dir[2]*normal[2]) * 170 + 60;
+                    image[int(row + (_height / 2))][int(col + (_width / 2))] = std::abs(light_dir[0]*normal[0] + light_dir[1]*normal[1] + light_dir[2]*normal[2]) * 170 + 60;
                     delete[] normal;
                 }
                 else{

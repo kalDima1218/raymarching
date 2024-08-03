@@ -39,10 +39,10 @@ public:
 
     float* get_normal(float pos[3]){
         auto *normal = new float[3];
-        float dist = this->get_dist(pos);
-        normal[0] = dist - this->_get_dist(pos[0] - 0.00001, pos[1], pos[2]);
-        normal[1] = dist - this->_get_dist(pos[0], pos[1] - 0.00001, pos[2]);
-        normal[2] = dist - this->_get_dist(pos[0], pos[1], pos[2] - 0.00001);
+        float dist = get_dist(pos);
+        normal[0] = dist - _get_dist(pos[0] - 0.00001, pos[1], pos[2]);
+        normal[1] = dist - _get_dist(pos[0], pos[1] - 0.00001, pos[2]);
+        normal[2] = dist - _get_dist(pos[0], pos[1], pos[2] - 0.00001);
 
         inplace_normalize(normal);
         return normal;
@@ -58,7 +58,7 @@ public:
     }
 
     float _get_dist(float pos_x, float pos_y, float pos_z) override{
-        return sqrt(pow(pos_x, 2.0) + pow(pos_y, 2.0) + pow(pos_z, 2.0)) - _r;
+        return sqrt(pow(pos_x - _pos[0], 2.0) + pow(pos_y - _pos[1], 2.0) + pow(pos_z - _pos[2], 2.0)) - _r;
     }
 };
 
@@ -71,7 +71,7 @@ public:
     }
 
     float _get_dist(float pos_x, float pos_y, float pos_z) override{
-        return std::max(std::max(std::abs(pos_x), std::abs(pos_y)), std::abs(pos_z)) - _side/2;
+        return std::max(std::max(std::abs(pos_x - _pos[0]), std::abs(pos_y - _pos[1])), std::abs(pos_z - _pos[2])) - _side/2;
     }
 };
 
