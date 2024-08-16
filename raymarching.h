@@ -6,12 +6,12 @@ class Scene{
 private:
     int _width;
     int _height;
-    float _light_pos[3] = {-5, 5, 0};
-    float *_cam_pos = new float[3];
-    float *_cam_dir = new float[3];
-    float *_pix_right_vec = new float[3];
-    float *_pix_down_vec = new float[3];
-    float *_display_center = new float[3];
+    Vector _light_pos = {-5, 5, 0};
+    Vector _cam_pos;
+    Vector _cam_dir;
+    Vector _pix_right_vec;
+    Vector _pix_down_vec;
+    Vector _display_center;
     float _pixel_size;
     float _fov = 1.3;
     SDF* _sdf;
@@ -34,75 +34,44 @@ public:
         set_preset(cam_pos, a, b);
     }
 
-    ~Scene(){
-        delete[] _cam_pos;
-        delete[] _cam_dir;
-        delete[] _pix_right_vec;
-        delete[] _pix_down_vec;
-        delete[] _display_center;
-    }
-
     // a вокруг оси y, b вокруг оси z
     void set_preset(float *cam_pos, float a, float b){
-        _cam_pos[0] = cam_pos[0];
-        _cam_pos[1] = cam_pos[1];
-        _cam_pos[2] = cam_pos[2];
-        _cam_dir[0] = 1;
-        _cam_dir[1] = 0;
-        _cam_dir[2] = 0;
-        _pix_right_vec[0] = 0;
-        _pix_right_vec[1] = _pixel_size;
-        _pix_right_vec[2] = 0;
-        _pix_down_vec[0] = 0;
-        _pix_down_vec[1] = 0;
-        _pix_down_vec[2] = -_pixel_size;
-        inplace_rotate_vector(_cam_dir, a, b);
-        inplace_rotate_vector(_pix_right_vec, a, b);
-        inplace_rotate_vector(_pix_down_vec, a, b);
-        _display_center[0] = _cam_pos[0];
-        _display_center[1] = _cam_pos[1];
-        _display_center[2] = _cam_pos[2];
-        inplace_sum_vectors(_display_center, _cam_dir);
+        _cam_pos = Vector(cam_pos);
+        _cam_dir = Vector(1, 0, 0);
+        _pix_right_vec = Vector(0, _pixel_size, 0);
+        _pix_down_vec = Vector(0, 0, -_pixel_size);
+        _cam_dir.rotate(a, b);
+        _pix_right_vec.rotate(a, b);
+        _pix_down_vec.rotate(a, b);
+        _display_center = _cam_pos + _cam_dir;
     }
 
     void render (){
-        float *ray_dir = new float[3];
-        float *pos = new float[3];
-        float *light_dir = new float[3];
+        Vector ray_dir;
+        Vector pos;
+        Vector light_dir;
         for(int row = -_height/2; row < _height/2; ++row){
             for(int col = -_width/2; col < _width/2; ++col){
-                ray_dir[0] = _display_center[0] + row*_pix_down_vec[0] + col*_pix_right_vec[0] - _cam_pos[0];
-                ray_dir[1] = _display_center[1] + row*_pix_down_vec[1] + col*_pix_right_vec[1] - _cam_pos[1];
-                ray_dir[2] = _display_center[2] + row*_pix_down_vec[2] + col*_pix_right_vec[2] - _cam_pos[2];
-                inplace_normalize(ray_dir);
-                pos[0] = _cam_pos[0];
-                pos[1] = _cam_pos[1];
-                pos[2] = _cam_pos[2];
+                ray_dir = _display_center + _pix_down_vec*row + _pix_right_vec*col - _cam_pos;
+                ray_dir.normalize();
+                pos = _cam_pos;
                 float dist = 0;
                 float delta = _sdf->get_dist(pos);
                 for(int i = 0; i < 100 and dist < 100 and delta > 0.0001; ++i){
                     dist+=delta;
-                    pos[0]+=delta*ray_dir[0];
-                    pos[1]+=delta*ray_dir[1];
-                    pos[2]+=delta*ray_dir[2];
+                    pos+=ray_dir*delta;
                     delta = _sdf->get_dist(pos);
                 }
                 if(delta <= 0.0001){
-                    light_dir[0] = _light_pos[0] - pos[0];
-                    light_dir[1] = _light_pos[1] - pos[1];
-                    light_dir[2] = _light_pos[2] - pos[2];
-                    inplace_normalize(light_dir);
-                    float *normal = _sdf->get_normal(pos);
+                    light_dir = _light_pos - pos;
+                    light_dir.normalize();
+                    Vector normal = _sdf->get_normal(pos);
                     image[int(row + (_height / 2))][int(col + (_width / 2))] = std::abs(light_dir[0]*normal[0] + light_dir[1]*normal[1] + light_dir[2]*normal[2]) * 170 + 60;
-                    delete[] normal;
                 }
                 else{
                     image[int(row + (_height / 2))][int(col + (_width / 2))] = 255;
                 }
             }
         }
-        delete[] ray_dir;
-        delete[] pos;
-        delete[] light_dir;
     }
 };

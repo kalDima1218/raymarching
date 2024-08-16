@@ -3,27 +3,19 @@
 
 class SDF{
 protected:
-    float _pos[3];
-
-    float _scale[3];
+    Vector _pos;
     
     float _a;
     float _b;
 public:
     SDF(){}
-    SDF(float pos_x, float pos_y, float pos_z, float scale_x, float scale_y, float scale_z, float a, float b) {
+
+    SDF(float pos_x, float pos_y, float pos_z, float a, float b) {
         _pos[0] = pos_x;
         _pos[1] = pos_y;
         _pos[2] = pos_z;
-        
-        rescale(scale_x, scale_y, scale_z);
+
         rotate(a, b);
-    }
-    
-    void rescale(float scale_x, float scale_y, float scale_z){
-        _scale[0] = scale_x;
-        _scale[1] = scale_y;
-        _scale[2] = scale_z;
     }
 
     void rotate(float a, float b){
@@ -31,20 +23,16 @@ public:
         _b = b;
     }
 
-    virtual float _get_dist(float, float, float){}
+    virtual float _get_dist(float, float, float){ return 0; }
 
-    float get_dist(float *pos){
+    float get_dist(Vector &pos){
         return _get_dist(pos[0], pos[1], pos[2]);
     }
 
-    float* get_normal(float pos[3]){
-        auto *normal = new float[3];
+    Vector get_normal(Vector pos){
         float dist = get_dist(pos);
-        normal[0] = dist - _get_dist(pos[0] - 0.00001, pos[1], pos[2]);
-        normal[1] = dist - _get_dist(pos[0], pos[1] - 0.00001, pos[2]);
-        normal[2] = dist - _get_dist(pos[0], pos[1], pos[2] - 0.00001);
-
-        inplace_normalize(normal);
+        Vector normal(dist - _get_dist(pos[0] - 0.00001, pos[1], pos[2]), dist - _get_dist(pos[0], pos[1] - 0.00001, pos[2]), dist - _get_dist(pos[0], pos[1], pos[2] - 0.00001));
+        normal.normalize();
         return normal;
     }
 };
@@ -53,7 +41,7 @@ class Sphere : public SDF{
 private:
     float _r;
 public:
-    Sphere(float pos_x, float pos_y, float pos_z, float scale_x, float scale_y, float scale_z, float a, float b, float r) : SDF(pos_x, pos_y, pos_z, scale_x, scale_y, scale_z, a, b){
+    Sphere(float pos_x, float pos_y, float pos_z, float a, float b, float r) : SDF(pos_x, pos_y, pos_z, a, b){
         _r = r;
     }
 
@@ -66,7 +54,7 @@ class Cube : public SDF{
 private:
     float _side;
 public:
-    Cube(float pos_x, float pos_y, float pos_z, float scale_x, float scale_y, float scale_z, float a, float b, float side) : SDF(pos_x, pos_y, pos_z, scale_x, scale_y, scale_z, a, b){
+    Cube(float pos_x, float pos_y, float pos_z, float a, float b, float side) : SDF(pos_x, pos_y, pos_z, a, b){
         _side = side;
     }
 
@@ -77,7 +65,7 @@ public:
 
 class Union : public SDF{
 private:
-    SDF *obj[2]{};
+    SDF *obj[2];
 public:
     Union(SDF *obj_1, SDF *obj_2) : SDF(){
         obj[0] = obj_1;

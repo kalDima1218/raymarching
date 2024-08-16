@@ -63,8 +63,8 @@ void console_rendering(SDF* s){
 
 int main(){
     SDF *s[3];
-    s[0] = new Sphere(0, 0, 0, 1, 1, 1, 0, 0, 0.65);
-    s[1] = new Cube(0, 0, 0, 1, 1, 1, 0, 0, 1);
+    s[0] = new Sphere(0, 0, 0, 0, 0, 0.65);
+    s[1] = new Cube(0, 0, 0, 0, 0, 1);
     s[2] = new Subtraction(s[1], s[0]);
 
     console_rendering(s[2]);

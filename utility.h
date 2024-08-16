@@ -1,64 +1,75 @@
 #include <cmath>
 
-float* rotate_vector(float *vec, float a, float b){
-    auto *res = new float[3];
-    res[0] = vec[0]*cos(a)*cos(b) - vec[2]*sin(a)*cos(b) + vec[1]*sin(b);
-    res[1] = -vec[0]*cos(a)*sin(b) + vec[2]*sin(a)*sin(b) + vec[1]*cos(b);
-    res[2] = vec[0]*sin(a) + vec[2]*cos(a);
-    return res;
-}
+class Vector {
+private:
+    float _vec[3]{};
+public:
+    Vector(){}
 
-void inplace_rotate_vector(float *vec, float a, float b){
-    auto *res = new float[3];
-    res[0] = vec[0]*cos(a)*cos(b) - vec[2]*sin(a)*cos(b) + vec[1]*sin(b);
-    res[1] = -vec[0]*cos(a)*sin(b) + vec[2]*sin(a)*sin(b) + vec[1]*cos(b);
-    res[2] = vec[0]*sin(a) + vec[2]*cos(a);
-    vec[0] = res[0];
-    vec[1] = res[1];
-    vec[2] = res[2];
-    delete[] res;
-}
+    Vector(float x, float y, float z){
+        _vec[0] = x;
+        _vec[1] = y;
+        _vec[2] = z;
+    }
 
-float* normalize(float *vec){
-    auto *res = new float[3];
-    float len = sqrt(pow(vec[0], 2) + pow(vec[1], 2) + pow(vec[2], 2));
-    res[0] = vec[0]/len;
-    res[1] = vec[1]/len;
-    res[2] = vec[2]/len;
-    return res;
-}
+    Vector(const float *vec){
+        for(int i = 0; i < 3; ++i){
+            _vec[i] = vec[i];
+        }
+    }
 
-void inplace_normalize(float *vec){
-    float len = sqrt(pow(vec[0], 2) + pow(vec[1], 2) + pow(vec[2], 2));
-    vec[0]/=len;
-    vec[1]/=len;
-    vec[2]/=len;
-}
+    Vector(const Vector &p){
+        for(int i = 0; i < 3; ++i){
+            _vec[i] = p._vec[i];
+        }
+    }
 
-float* sum_vectors(float *a, float *b){
-    auto *res = new float[3];
-    res[0] = a[0] + b[0];
-    res[1] = a[1] + b[1];
-    res[2] = a[2] + b[2];
-    return res;
-}
+    void rotate(float a, float b){
+        float res[3];
+        res[0] = _vec[0] * cos(a) * cos(b) - _vec[2] * sin(a) * cos(b) + _vec[1] * sin(b);
+        res[1] = -_vec[0] * cos(a) * sin(b) + _vec[2] * sin(a) * sin(b) + _vec[1] * cos(b);
+        res[2] = _vec[0] * sin(a) + _vec[2] * cos(a);
+        std::swap(_vec, res);
+    }
 
-void inplace_sum_vectors(float *a, float *b){
-    a[0]+=b[0];
-    a[1]+=b[1];
-    a[2]+=b[2];
-}
+    void normalize(){
+        float len = sqrt(pow(_vec[0], 2) + pow(_vec[1], 2) + pow(_vec[2], 2));
+        _vec[0]/=len;
+        _vec[1]/=len;
+        _vec[2]/=len;
+    }
 
-float* multiply_vector(float *vec, float l){
-    auto *res = new float[3];
-    res[0] = l * vec[0];
-    res[1] = l * vec[1];
-    res[2] = l * vec[2];
-    return res;
-}
+    float& operator[](int i){
+        return _vec[i];
+    }
 
-void inplace_multiply_vector(float *vec, float l){
-    vec[0]*=l;
-    vec[1]*=l;
-    vec[2]*=l;
-}
+    Vector operator+(const Vector &v){
+        return {_vec[0] + v._vec[0], _vec[1] + v._vec[1], _vec[2] + v._vec[2]};
+    }
+
+    Vector operator-(const Vector &v){
+        return {_vec[0] - v._vec[0], _vec[1] - v._vec[1], _vec[2] - v._vec[2]};
+    }
+
+    Vector operator*(float k){
+        return {_vec[0] * k, _vec[1] * k, _vec[2] * k};
+    }
+
+    void operator+=(const Vector &v){
+        for(int i = 0; i < 3; ++i){
+            _vec[i]+=v._vec[i];
+        }
+    }
+
+    void operator*=(float k){
+        for(float & i : _vec) {
+            i *= k;
+        }
+    }
+
+    void operator/=(float k){
+        for(float & i : _vec) {
+            i /= k;
+        }
+    }
+};
