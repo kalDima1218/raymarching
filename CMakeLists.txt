@@ -3,5 +3,8 @@ project(raymarching)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(raymarching main.cpp raymarching.h sdf.h
-        utility.h lodepng.h lodepng.cpp)
+add_executable(raymarching main.cpp Scene.h SDF.h
+        Vector.h lodepng.h lodepng.cpp
+        Vector.cpp
+        SDF.cpp
+        Scene.cpp)

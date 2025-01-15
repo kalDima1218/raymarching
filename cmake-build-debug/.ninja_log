@@ -1,7 +1,16 @@
 # ninja log v6
-2	439	1723844577356360998	CMakeFiles/raymarching.dir/main.cpp.o	6710cb31a154610b
-2	623	1723844577356667649	CMakeFiles/raymarching.dir/lodepng.cpp.o	f53bdc6788c7ae55
-623	667	1723844577977687486	raymarching	dde8266a941c5fb3
 3	550	1723845118342448176	CMakeFiles/raymarching.dir/main.cpp.o	6710cb31a154610b
-3	652	1723845118342753616	CMakeFiles/raymarching.dir/lodepng.cpp.o	f53bdc6788c7ae55
+11	766	1736957996575277631	CMakeFiles/raymarching.dir/lodepng.cpp.o	af4ac945bfdd6cd4
 652	702	1723845118991972800	raymarching	dde8266a941c5fb3
+6	308	1736958009818869263	CMakeFiles/raymarching.dir/Vector.cpp.o	6876f29ef860130
+9	558	1736966141366694942	CMakeFiles/raymarching.dir/SDF.cpp.o	86b3583e8b8ee78b
+7	564	1736966141365625163	CMakeFiles/raymarching.dir/Vector.cpp.o	6876f29ef860130
+9	574	1736966141367165001	CMakeFiles/raymarching.dir/Scene.cpp.o	c8b8aad28045f1d7
+7	683	1736966141365182227	CMakeFiles/raymarching.dir/main.cpp.o	be8b21f0e865d6b3
+7	696	1736966141365488336	CMakeFiles/raymarching.dir/lodepng.cpp.o	af4ac945bfdd6cd4
+696	833	1736966142054460810	raymarching	4324df5b3da904c1
+5	354	1736966264039320445	CMakeFiles/raymarching.dir/SDF.cpp.o	86b3583e8b8ee78b
+4	508	1736966264038337035	CMakeFiles/raymarching.dir/main.cpp.o	be8b21f0e865d6b3
+508	549	1736966264541567449	raymarching	4324df5b3da904c1
+3	306	1736966298311664588	CMakeFiles/raymarching.dir/Scene.cpp.o	c8b8aad28045f1d7
+307	343	1736966298614686631	raymarching	4324df5b3da904c1
