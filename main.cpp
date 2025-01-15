@@ -8,7 +8,7 @@ void image_rendering(const Scene &scene) {
     int32_t w = 128;
     int32_t h = 128;
     Vector cam_pos = {-2, -2, 0};
-    std::vector<std::vector<unsigned char>> image_from_render = scene.render();
+    const std::vector<std::vector<unsigned char>>& image_from_render = scene.render();
     const char *filename = "test.png";
     std::vector<unsigned char> image(4 * w * h);
     for (int32_t i = 0; i < h; ++i) {
