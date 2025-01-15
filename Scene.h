@@ -1,22 +1,22 @@
 #include <cmath>
 #include <memory>
+#include <cstdint>
 #include "SDF.h"
 
 class Scene {
 private:
-    int _width;
-    int _height;
-    float _pixel_size;
-    float _fov;
-    Vector _light_pos;
-    Vector _cam_pos;
-    Vector _cam_dir;
-    Vector _pix_right_vec;
-    Vector _pix_down_vec;
-    Vector _display_center;
-    std::shared_ptr<SDF> _sdf;
-
-    std::vector<std::vector<unsigned char>> _image;
+    int width_;
+    int height_;
+    float pixel_size_;
+    float fov_;
+    Vector light_pos_;
+    Vector cam_pos_;
+    Vector cam_dir_;
+    Vector pix_right_vec_;
+    Vector pix_down_vec_;
+    Vector display_center_;
+    std::shared_ptr<SDF> sdf_;
+    std::vector<std::vector<unsigned char>> image_;
 
 public:
 

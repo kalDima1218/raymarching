@@ -1,53 +1,53 @@
 #include "Scene.h"
 
 Scene::Scene(int width, int height, float a, float b, const Vector &cam_pos, const Vector &light_pos, const std::shared_ptr<SDF> &sdf, float fov) {
-    _width = width;
-    _height = height;
-    _light_pos = light_pos;
-    _image = std::vector<std::vector<unsigned char>>(_height, std::vector<unsigned char>(_width));
-    _sdf = sdf;
-    _fov = fov;
-    _pixel_size = 2 * (tan(_fov / 2) / static_cast<float>(height));
+    width_ = width;
+    height_ = height;
+    light_pos_ = light_pos;
+    image_ = std::vector<std::vector<unsigned char>>(height_, std::vector<unsigned char>(width_));
+    sdf_ = sdf;
+    fov_ = fov;
+    pixel_size_ = 2 * (tan(fov_ / 2) / static_cast<float>(height));
     set_preset(cam_pos, a, b);
 }
 
 // a вокруг оси y, b вокруг оси z
 void Scene::set_preset(const Vector &cam_pos, float a, float b) {
-    _cam_pos = Vector(cam_pos);
-    _cam_dir = Vector(1, 0, 0);
-    _pix_right_vec = Vector(0, _pixel_size, 0);
-    _pix_down_vec = Vector(0, 0, -_pixel_size);
-    _cam_dir.rotate(a, b);
-    _pix_right_vec.rotate(a, b);
-    _pix_down_vec.rotate(a, b);
-    _display_center = _cam_pos + _cam_dir;
+    cam_pos_ = Vector(cam_pos);
+    cam_dir_ = Vector(1, 0, 0);
+    pix_right_vec_ = Vector(0, pixel_size_, 0);
+    pix_down_vec_ = Vector(0, 0, -pixel_size_);
+    cam_dir_.rotate(a, b);
+    pix_right_vec_.rotate(a, b);
+    pix_down_vec_.rotate(a, b);
+    display_center_ = cam_pos_ + cam_dir_;
 }
 
 std::vector<std::vector<unsigned char>> &Scene::render() {
     Vector ray_dir;
     Vector pos;
     Vector light_dir;
-    for (int row = -_height / 2; row < _height / 2; ++row) {
-        for (int col = -_width / 2; col < _width / 2; ++col) {
-            ray_dir = _display_center + _pix_down_vec * row + _pix_right_vec * col - _cam_pos;
+    for (int32_t row = -height_ / 2; row < height_ / 2; ++row) {
+        for (int32_t col = -width_ / 2; col < width_ / 2; ++col) {
+            ray_dir = display_center_ + pix_down_vec_ * row + pix_right_vec_ * col - cam_pos_;
             ray_dir.normalize();
-            pos = _cam_pos;
+            pos = cam_pos_;
             float dist = 0;
-            float delta = _sdf->get_dist(pos);
-            for (int i = 0; i < 100 and dist < 100 and delta > 0.0001; ++i) {
+            float delta = sdf_->get_dist(pos);
+            for (int32_t i = 0; i < 100 && dist < 100 && delta > 0.0001; ++i) {
                 dist += delta;
                 pos += ray_dir * delta;
-                delta = _sdf->get_dist(pos);
+                delta = sdf_->get_dist(pos);
             }
             if (delta <= 0.0001) {
-                light_dir = _light_pos - pos;
+                light_dir = light_pos_ - pos;
                 light_dir.normalize();
-                Vector normal = _sdf->get_normal(pos);
-                _image[int(row + (_height / 2))][int(col + (_width / 2))] = std::abs(light_dir[0] * normal[0] + light_dir[1] * normal[1] + light_dir[2] * normal[2]) * 170 + 60;
+                Vector normal = sdf_->get_normal(pos);
+                image_[static_cast<int>(row + (height_ / 2))][static_cast<int>(col + (width_ / 2))] = static_cast<unsigned char>(std::abs(light_dir[0] * normal[0] + light_dir[1] * normal[1] + light_dir[2] * normal[2]) * 170 + 60);
             } else {
-                _image[int(row + (_height / 2))][int(col + (_width / 2))] = 255;
+                image_[static_cast<int>(row + (height_ / 2))][static_cast<int>(col + (width_ / 2))] = 255;
             }
         }
     }
-    return _image;
+    return image_;
 }

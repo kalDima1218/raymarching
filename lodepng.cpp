@@ -3434,7 +3434,7 @@ static unsigned color_tree_add(ColorTree* tree,
   return 0;
 }
 
-/*put a pixel, given its RGBA color, into _image of any color type*/
+/*put a pixel, given its RGBA color, into image_ of any color type*/
 static unsigned rgba8ToPixel(unsigned char* out, size_t i,
                              const LodePNGColorMode* mode, ColorTree* tree /*for palette*/,
                              unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
@@ -3488,7 +3488,7 @@ static unsigned rgba8ToPixel(unsigned char* out, size_t i,
   return 0; /*no error*/
 }
 
-/*put a pixel, given its RGBA16 color, into _image of any color 16-bitdepth type*/
+/*put a pixel, given its RGBA16 color, into image_ of any color 16-bitdepth type*/
 static void rgba16ToPixel(unsigned char* out, size_t i,
                          const LodePNGColorMode* mode,
                          unsigned short r, unsigned short g, unsigned short b, unsigned short a) {
@@ -3521,7 +3521,7 @@ static void rgba16ToPixel(unsigned char* out, size_t i,
   }
 }
 
-/*Get RGBA8 color of pixel with index i (y * width + x) from the raw _image with given color type.*/
+/*Get RGBA8 color of pixel with index i (y * width + x) from the raw image_ with given color type.*/
 static void getPixelColorRGBA8(unsigned char* r, unsigned char* g,
                                unsigned char* b, unsigned char* a,
                                const unsigned char* in, size_t i,
@@ -3764,7 +3764,7 @@ static void getPixelColorsRGB8(unsigned char* LODEPNG_RESTRICT buffer, size_t nu
   }
 }
 
-/*Get RGBA16 color of pixel with index i (y * width + x) from the raw _image with
+/*Get RGBA16 color of pixel with index i (y * width + x) from the raw image_ with
 given color type, but the given color type must be 16-bit itself.*/
 static void getPixelColorRGBA16(unsigned short* r, unsigned short* g, unsigned short* b, unsigned short* a,
                                 const unsigned char* in, size_t i, const LodePNGColorMode* mode) {
@@ -3869,7 +3869,7 @@ unsigned lodepng_convert(unsigned char* out, const unsigned char* in,
 
 /* Converts a single rgb color without alpha from one type to another, color bits truncated to
 their bitdepth. In case of single channel (gray or palette), only the r channel is used. Slow
-function, do not use to process all pixels of an _image. Alpha channel not supported on purpose:
+function, do not use to process all pixels of an image_. Alpha channel not supported on purpose:
 this is for bKGD, supporting alpha may prevent it from finding a color in the palette, from the
 specification it looks like bKGD should ignore the alpha values of the palette since it can use
 any palette index but doesn't have an alpha channel. Idem with ignoring color key. */
@@ -3974,7 +3974,7 @@ unsigned lodepng_compute_color_stats(LodePNGColorStats* stats,
   unsigned numcolors_done = 0;
   unsigned bpp = lodepng_get_bpp(mode_in);
   unsigned bits_done = (stats->bits == 1 && bpp == 1) ? 1 : 0;
-  unsigned sixteen = 0; /* whether the input _image is 16 bit */
+  unsigned sixteen = 0; /* whether the input image_ is 16 bit */
   unsigned maxnumcolors = 257;
   if(bpp <= 8) maxnumcolors = LODEPNG_MIN(257, stats->numcolors + (1u << bpp));
 
@@ -4146,7 +4146,7 @@ cleanup:
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 /*Adds a single color to the color stats. The stats must already have been inited. The color must be given as 16-bit
 (with 2 bytes repeating for 8-bit and 65535 for opaque alpha channel). This function is expensive, do not call it for
-all pixels of an _image but only for a few additional values. */
+all pixels of an image_ but only for a few additional values. */
 static unsigned lodepng_color_stats_add(LodePNGColorStats* stats,
                                         unsigned r, unsigned g, unsigned b, unsigned a) {
   unsigned error = 0;
@@ -4165,8 +4165,8 @@ static unsigned lodepng_color_stats_add(LodePNGColorStats* stats,
 
 /*Computes a minimal PNG color model that can contain all colors as indicated by the stats.
 The stats should be computed with lodepng_compute_color_stats.
-mode_in is raw color profile of the _image the stats were computed on, to copy palette order from when relevant.
-Minimal PNG color model means the color type and bit depth that gives smallest amount of bits in the output _image,
+mode_in is raw color profile of the image_ the stats were computed on, to copy palette order from when relevant.
+Minimal PNG color model means the color type and bit depth that gives smallest amount of bits in the output image_,
 e.g. gray if only grayscale pixels, palette if less than 256 colors, color key if only single transparent color, ...
 This is used if auto_convert is enabled (it is by default).
 */
@@ -4198,7 +4198,7 @@ static unsigned auto_choose_color(LodePNGColorMode* mode_out,
   n = stats->numcolors;
   palettebits = n <= 2 ? 1 : (n <= 4 ? 2 : (n <= 16 ? 4 : 8));
   palette_ok = n <= 256 && bits <= 8 && n != 0; /*n==0 means likely numcolors wasn't computed*/
-  if(numpixels < n * 2) palette_ok = 0; /*don't add palette overhead if _image has only a few pixels*/
+  if(numpixels < n * 2) palette_ok = 0; /*don't add palette overhead if image_ has only a few pixels*/
   if(gray_ok && !alpha && bits <= palettebits) palette_ok = 0; /*gray is less overhead*/
   if(!stats->allow_palette) palette_ok = 0;
 
@@ -4258,18 +4258,18 @@ static const unsigned ADAM7_DX[7] = { 8, 8, 4, 4, 2, 2, 1 }; /*x delta values*/
 static const unsigned ADAM7_DY[7] = { 8, 8, 8, 4, 4, 2, 2 }; /*y delta values*/
 
 /*
-Outputs various dimensions and positions in the _image related to the Adam7 reduced images.
+Outputs various dimensions and positions in the image_ related to the Adam7 reduced images.
 passw: output containing the width of the 7 passes
 passh: output containing the height of the 7 passes
 filter_passstart: output containing the index of the start and end of each
- reduced _image with filter bytes
+ reduced image_ with filter bytes
 padded_passstart output containing the index of the start and end of each
- reduced _image when without filter bytes but with padded scanlines
+ reduced image_ when without filter bytes but with padded scanlines
 passstart: output containing the index of the start and end of each reduced
- _image without padding between scanlines, but still padding between the images
-w, h: width and height of non-interlaced _image
+ image_ without padding between scanlines, but still padding between the images
+w, h: width and height of non-interlaced image_
 bpp: bits per pixel
-"padded" is only relevant if bpp is less than 8 and a scanline or _image does not
+"padded" is only relevant if bpp is less than 8 and a scanline or image_ does not
  end at a full byte
 */
 static void Adam7_getpassvalues(unsigned passw[7], unsigned passh[7], size_t filter_passstart[8],
@@ -4292,7 +4292,7 @@ static void Adam7_getpassvalues(unsigned passw[7], unsigned passh[7], size_t fil
                             + ((passw[i] && passh[i]) ? passh[i] * (1u + (passw[i] * bpp + 7u) / 8u) : 0);
     /*bits padded if needed to fill full byte at end of each scanline*/
     padded_passstart[i + 1] = padded_passstart[i] + passh[i] * ((passw[i] * bpp + 7u) / 8u);
-    /*only padded at end of reduced _image*/
+    /*only padded at end of reduced image_*/
     passstart[i + 1] = passstart[i] + (passh[i] * passw[i] * bpp + 7u) / 8u;
   }
 }
@@ -4315,7 +4315,7 @@ unsigned lodepng_inspect(unsigned* w, unsigned* h, LodePNGState* state,
     CERROR_RETURN_ERROR(state->error, 27); /*error: the data length is smaller than the length of a PNG header*/
   }
 
-  /*when decoding a new PNG _image, make sure all parameters created after previous decoding are reset*/
+  /*when decoding a new PNG image_, make sure all parameters created after previous decoding are reset*/
   /* TODO: remove this. One should use a new LodePNGState for new sessions */
   lodepng_info_cleanup(info);
   lodepng_info_init(info);
@@ -4345,7 +4345,7 @@ unsigned lodepng_inspect(unsigned* w, unsigned* h, LodePNGState* state,
 
   /*errors returned only after the parsing so other values are still output*/
 
-  /*error: invalid _image size*/
+  /*error: invalid image_ size*/
   if(width == 0 || height == 0) CERROR_RETURN_ERROR(state->error, 93);
   /*error: invalid colortype or bitdepth combination*/
   state->error = checkColorValidity(info->color.colortype, info->color.bitdepth);
@@ -4372,7 +4372,7 @@ static unsigned unfilterScanline(unsigned char* recon, const unsigned char* scan
                                  size_t bytewidth, unsigned char filterType, size_t length) {
   /*
   For PNG filter method 0
-  unfilter a PNG _image scanline by scanline. when the pixels are smaller than 1 byte,
+  unfilter a PNG image_ scanline by scanline. when the pixels are smaller than 1 byte,
   the filter works byte per byte (bytewidth = 1)
   precon is the previous unfiltered scanline, recon the result, scanline the current one
   the incoming scanlines do NOT include the filtertype byte, that one is given in the parameter filterType instead
@@ -4562,9 +4562,9 @@ static unsigned unfilterScanline(unsigned char* recon, const unsigned char* scan
 static unsigned unfilter(unsigned char* out, const unsigned char* in, unsigned w, unsigned h, unsigned bpp) {
   /*
   For PNG filter method 0
-  this function unfilters a single _image (e.g. without interlacing this is called once, with Adam7 seven times)
+  this function unfilters a single image_ (e.g. without interlacing this is called once, with Adam7 seven times)
   out must have enough bytes allocated already, in must have the scanlines + 1 filtertype byte per scanline
-  w and h are _image dimensions or dimensions of reduced _image, bpp is bits per pixel
+  w and h are image_ dimensions or dimensions of reduced image_, bpp is bits per pixel
   in and out are allowed to be the same memory address (but aren't the same size since in has the extra filter bytes)
   */
 
@@ -4590,9 +4590,9 @@ static unsigned unfilter(unsigned char* out, const unsigned char* in, unsigned w
 }
 
 /*
-in: Adam7 interlaced _image, with no padding bits between scanlines, but between
- reduced images so that each reduced _image starts at a byte.
-out: the same pixels, but re-ordered so that they're now a non-interlaced _image with size w*h
+in: Adam7 interlaced image_, with no padding bits between scanlines, but between
+ reduced images so that each reduced image_ starts at a byte.
+out: the same pixels, but re-ordered so that they're now a non-interlaced image_ with size w*h
 bpp: bits per pixel
 out has the following size in bits: w * h * bpp.
 in is possibly bigger due to padding bits between reduced images.
@@ -4644,7 +4644,7 @@ static void removePaddingBits(unsigned char* out, const unsigned char* in,
                               size_t olinebits, size_t ilinebits, unsigned h) {
   /*
   After filtering there are still padding bits if scanlines have non multiple of 8 bit amounts. They need
-  to be removed (except at last scanline of (Adam7-reduced) _image) before working with pure _image buffers
+  to be removed (except at last scanline of (Adam7-reduced) image_) before working with pure image_ buffers
   for the Adam7 code, the color convert code and the output to the user.
   in and out are allowed to be the same buffer, in may also be higher but still overlapping; in must
   have >= ilinebits*h bits, out must have >= olinebits*h bits, olinebits must be <= ilinebits
@@ -4664,13 +4664,13 @@ static void removePaddingBits(unsigned char* out, const unsigned char* in,
   }
 }
 
-/*out must be buffer big enough to contain full _image, and in must contain the full decompressed data from
+/*out must be buffer big enough to contain full image_, and in must contain the full decompressed data from
 the IDAT chunks (with filter index bytes and possible padding bits)
 return value is error*/
 static unsigned postProcessScanlines(unsigned char* out, unsigned char* in,
                                      unsigned w, unsigned h, const LodePNGInfo* info_png) {
   /*
-  This function converts the filtered-padded-interlaced data into pure 2D _image buffer with the PNG's colortype.
+  This function converts the filtered-padded-interlaced data into pure 2D image_ buffer with the PNG's colortype.
   Steps:
   *) if no Adam7: 1) unfilter 2) remove padding bits (= possible extra bits per scanline if bpp < 8)
   *) if adam7: 1) 7x unfilter 2) 7x remove padding bits 3) Adam7_deinterlace
@@ -4694,11 +4694,11 @@ static unsigned postProcessScanlines(unsigned char* out, unsigned char* in,
 
     for(i = 0; i != 7; ++i) {
       CERROR_TRY_RETURN(unfilter(&in[padded_passstart[i]], &in[filter_passstart[i]], passw[i], passh[i], bpp));
-      /*TODO: possible efficiency improvement: if in this reduced _image the bits fit nicely in 1 scanline,
+      /*TODO: possible efficiency improvement: if in this reduced image_ the bits fit nicely in 1 scanline,
       move bytes instead of bits or move not at all*/
       if(bpp < 8) {
         /*remove padding bits in scanlines; after this there still may be padding
-        bits between the different reduced images: each reduced _image still starts nicely at a byte*/
+        bits between the different reduced images: each reduced image_ still starts nicely at a byte*/
         removePaddingBits(&in[passstart[i]], &in[padded_passstart[i]], passw[i] * bpp,
                           ((passw[i] * bpp + 7u) / 8u) * 8u, passh[i]);
       }
@@ -4738,13 +4738,13 @@ static unsigned readChunk_tRNS(LodePNGColorMode* color, const unsigned char* dat
 
     for(i = 0; i != chunkLength; ++i) color->palette[4 * i + 3] = data[i];
   } else if(color->colortype == LCT_GREY) {
-    /*error: this chunk must be 2 bytes for grayscale _image*/
+    /*error: this chunk must be 2 bytes for grayscale image_*/
     if(chunkLength != 2) return 30;
 
     color->key_defined = 1;
     color->key_r = color->key_g = color->key_b = 256u * data[0] + data[1];
   } else if(color->colortype == LCT_RGB) {
-    /*error: this chunk must be 6 bytes for RGB _image*/
+    /*error: this chunk must be 6 bytes for RGB image_*/
     if(chunkLength != 6) return 41;
 
     color->key_defined = 1;
@@ -4762,7 +4762,7 @@ static unsigned readChunk_tRNS(LodePNGColorMode* color, const unsigned char* dat
 /*background color chunk (bKGD)*/
 static unsigned readChunk_bKGD(LodePNGInfo* info, const unsigned char* data, size_t chunkLength) {
   if(info->color.colortype == LCT_PALETTE) {
-    /*error: this chunk must be 1 byte for indexed color _image*/
+    /*error: this chunk must be 1 byte for indexed color image_*/
     if(chunkLength != 1) return 43;
 
     /*error: invalid palette index, or maybe this chunk appeared before PLTE*/
@@ -4771,14 +4771,14 @@ static unsigned readChunk_bKGD(LodePNGInfo* info, const unsigned char* data, siz
     info->background_defined = 1;
     info->background_r = info->background_g = info->background_b = data[0];
   } else if(info->color.colortype == LCT_GREY || info->color.colortype == LCT_GREY_ALPHA) {
-    /*error: this chunk must be 2 bytes for grayscale _image*/
+    /*error: this chunk must be 2 bytes for grayscale image_*/
     if(chunkLength != 2) return 44;
 
     /*the values are truncated to bitdepth in the PNG file*/
     info->background_defined = 1;
     info->background_r = info->background_g = info->background_b = 256u * data[0] + data[1];
   } else if(info->color.colortype == LCT_RGB || info->color.colortype == LCT_RGBA) {
-    /*error: this chunk must be 6 bytes for grayscale _image*/
+    /*error: this chunk must be 6 bytes for grayscale image_*/
     if(chunkLength != 6) return 45;
 
     /*the values are truncated to bitdepth in the PNG file*/
@@ -5068,13 +5068,13 @@ static unsigned readChunk_iCCP(LodePNGInfo* info, const LodePNGDecoderSettings* 
 static unsigned readChunk_sBIT(LodePNGInfo* info, const unsigned char* data, size_t chunkLength) {
   unsigned bitdepth = (info->color.colortype == LCT_PALETTE) ? 8 : info->color.bitdepth;
   if(info->color.colortype == LCT_GREY) {
-    /*error: this chunk must be 1 bytes for grayscale _image*/
+    /*error: this chunk must be 1 bytes for grayscale image_*/
     if(chunkLength != 1) return 114;
     if(data[0] == 0 || data[0] > bitdepth) return 115;
     info->sbit_defined = 1;
     info->sbit_r = info->sbit_g = info->sbit_b = data[0]; /*setting g and b is not required, but sensible*/
   } else if(info->color.colortype == LCT_RGB || info->color.colortype == LCT_PALETTE) {
-    /*error: this chunk must be 3 bytes for RGB and palette _image*/
+    /*error: this chunk must be 3 bytes for RGB and palette image_*/
     if(chunkLength != 3) return 114;
     if(data[0] == 0 || data[1] == 0 || data[2] == 0) return 115;
     if(data[0] > bitdepth || data[1] > bitdepth || data[2] > bitdepth) return 115;
@@ -5083,7 +5083,7 @@ static unsigned readChunk_sBIT(LodePNGInfo* info, const unsigned char* data, siz
     info->sbit_g = data[1];
     info->sbit_b = data[2];
   } else if(info->color.colortype == LCT_GREY_ALPHA) {
-    /*error: this chunk must be 2 byte for grayscale with alpha _image*/
+    /*error: this chunk must be 2 byte for grayscale with alpha image_*/
     if(chunkLength != 2) return 114;
     if(data[0] == 0 || data[1] == 0) return 115;
     if(data[0] > bitdepth || data[1] > bitdepth) return 115;
@@ -5091,7 +5091,7 @@ static unsigned readChunk_sBIT(LodePNGInfo* info, const unsigned char* data, siz
     info->sbit_r = info->sbit_g = info->sbit_b = data[0]; /*setting g and b is not required, but sensible*/
     info->sbit_a = data[1];
   } else if(info->color.colortype == LCT_RGBA) {
-    /*error: this chunk must be 4 bytes for grayscale _image*/
+    /*error: this chunk must be 4 bytes for grayscale image_*/
     if(chunkLength != 4) return 114;
     if(data[0] == 0 || data[1] == 0 || data[2] == 0 || data[3] == 0) return 115;
     if(data[0] > bitdepth || data[1] > bitdepth || data[2] > bitdepth || data[3] > bitdepth) return 115;
@@ -5225,7 +5225,7 @@ static void decodeGeneric(unsigned char** out, unsigned* w, unsigned* h,
 
     unknown = 0;
 
-    /*IDAT chunk, containing compressed _image data*/
+    /*IDAT chunk, containing compressed image_ data*/
     if(lodepng_chunk_type_equals(chunk, "IDAT")) {
       size_t newsize;
       if(lodepng_addofl(idatsize, chunkLength, &newsize)) CERROR_BREAK(state->error, 95);
@@ -5325,7 +5325,7 @@ static void decodeGeneric(unsigned char** out, unsigned* w, unsigned* h,
 
   if(!state->error) {
     /*predict output size, to allocate exact size for output buffer to avoid more dynamic allocation.
-    If the decompressed size does not match the prediction, the _image must be corrupt.*/
+    If the decompressed size does not match the prediction, the image_ must be corrupt.*/
     if(state->info_png.interlace_method == 0) {
       unsigned bpp = lodepng_get_bpp(&state->info_png.color);
       expected_size = lodepng_get_raw_size_idat(*w, *h, bpp);
@@ -5368,7 +5368,7 @@ unsigned lodepng_decode(unsigned char** out, unsigned* w, unsigned* h,
   if(!state->decoder.color_convert || lodepng_color_mode_equal(&state->info_raw, &state->info_png.color)) {
     /*same color type, no copying or converting of data needed*/
     /*store the info_png color settings on the info_raw so that the info_raw still reflects what colortype
-    the raw _image has to the end user*/
+    the raw image_ has to the end user*/
     if(!state->decoder.color_convert) {
       state->error = lodepng_color_mode_copy(&state->info_raw, &state->info_png.color);
       if(state->error) return state->error;
@@ -5913,9 +5913,9 @@ static unsigned filter(unsigned char* out, const unsigned char* in, unsigned w, 
 
   /*
   There is a heuristic called the minimum sum of absolute differences heuristic, suggested by the PNG standard:
-   *  If the _image type is Palette, or the bit depth is smaller than 8, then do not filter the _image (i.e.
+   *  If the image_ type is Palette, or the bit depth is smaller than 8, then do not filter the image_ (i.e.
       use fixed filtering, with the filter None).
-   * (The other case) If the _image type is Grayscale or RGB (with or without Alpha), and the bit depth is
+   * (The other case) If the image_ type is Grayscale or RGB (with or without Alpha), and the bit depth is
      not smaller than 8, then use adaptive filtering heuristic as follows: independently for each row, apply
      all five filters and select the filter that produces the smallest sum of absolute values per row.
   This heuristic is used if filter strategy is LFS_MINSUM and filter_palette_zero is true.
@@ -6045,7 +6045,7 @@ static unsigned filter(unsigned char* out, const unsigned char* in, unsigned w, 
     LodePNGCompressSettings zlibsettings;
     lodepng_memcpy(&zlibsettings, &settings->zlibsettings, sizeof(LodePNGCompressSettings));
     /*use fixed tree on the attempts so that the tree is not adapted to the filtertype on purpose,
-    to simulate the true case where the tree is the same for the whole _image. Sometimes it gives
+    to simulate the true case where the tree is the same for the whole image_. Sometimes it gives
     better result with dynamic tree anyway. Using the fixed tree sometimes gives worse, but in rare
     cases better compression. It does make this a bit less slow, so it's worth doing this.*/
     zlibsettings.btype = 1;
@@ -6106,10 +6106,10 @@ static void addPaddingBits(unsigned char* out, const unsigned char* in,
 }
 
 /*
-in: non-interlaced _image with size w*h
+in: non-interlaced image_ with size w*h
 out: the same pixels, but re-ordered according to PNG's Adam7 interlacing, with
  no padding bits between scanlines, but between reduced images so that each
- reduced _image starts at a byte.
+ reduced image_ starts at a byte.
 bpp: bits per pixel
 there are no padding bits, not between scanlines, not between reduced images
 in has the following size in bits: w * h * bpp.
@@ -6155,13 +6155,13 @@ static void Adam7_interlace(unsigned char* out, const unsigned char* in, unsigne
   }
 }
 
-/*out must be buffer big enough to contain uncompressed IDAT chunk data, and in must contain the full _image.
+/*out must be buffer big enough to contain uncompressed IDAT chunk data, and in must contain the full image_.
 return value is error**/
 static unsigned preProcessScanlines(unsigned char** out, size_t* outsize, const unsigned char* in,
                                     unsigned w, unsigned h,
                                     const LodePNGInfo* info_png, const LodePNGEncoderSettings* settings) {
   /*
-  This function converts the pure 2D _image with the PNG's colortype, into filtered-padded-interlaced data. Steps:
+  This function converts the pure 2D image_ with the PNG's colortype, into filtered-padded-interlaced data. Steps:
   *) if no Adam7: 1) add padding bits (= possible extra bits per scanline if bpp < 8) 2) filter
   *) if adam7: 1) Adam7_interlace 2) 7x add padding bits 3) 7x filter
   */
@@ -6169,7 +6169,7 @@ static unsigned preProcessScanlines(unsigned char** out, size_t* outsize, const 
   unsigned error = 0;
 
   if(info_png->interlace_method == 0) {
-    *outsize = h + (h * ((w * bpp + 7u) / 8u)); /*_image size plus an extra byte per scanline + possible padding bits*/
+    *outsize = h + (h * ((w * bpp + 7u) / 8u)); /*image_ size plus an extra byte per scanline + possible padding bits*/
     *out = (unsigned char*)lodepng_malloc(*outsize);
     if(!(*out) && (*outsize)) error = 83; /*alloc fail*/
 
@@ -6195,7 +6195,7 @@ static unsigned preProcessScanlines(unsigned char** out, size_t* outsize, const 
 
     Adam7_getpassvalues(passw, passh, filter_passstart, padded_passstart, passstart, w, h, bpp);
 
-    *outsize = filter_passstart[7]; /*_image size plus an extra byte per scanline + possible padding bits*/
+    *outsize = filter_passstart[7]; /*image_ size plus an extra byte per scanline + possible padding bits*/
     *out = (unsigned char*)lodepng_malloc(*outsize);
     if(!(*out)) error = 83; /*alloc fail*/
 
@@ -6680,8 +6680,8 @@ const char* lodepng_error_text(unsigned code) {
 
     /*end of out buffer memory reached while inflating:
     This can happen if the inflated deflate data is longer than the amount of bytes required to fill up
-    all the pixels of the _image, given the color depth and _image dimensions. Something that doesn't
-    happen in a normal, well encoded, PNG _image.*/
+    all the pixels of the image_, given the color depth and image_ dimensions. Something that doesn't
+    happen in a normal, well encoded, PNG image_.*/
     case 22: return "end of out buffer memory reached while inflating";
     case 23: return "end of in buffer memory reached while inflating";
     case 24: return "invalid FCHECK in zlib header";
@@ -6701,12 +6701,12 @@ const char* lodepng_error_text(unsigned code) {
     case 37: return "illegal bit depth for this color type given";
     case 38: return "the palette is too small or too big"; /*0, or more than 256 colors*/
     case 39: return "tRNS chunk before PLTE or has more entries than palette size";
-    case 40: return "tRNS chunk has wrong size for grayscale _image";
-    case 41: return "tRNS chunk has wrong size for RGB _image";
+    case 40: return "tRNS chunk has wrong size for grayscale image_";
+    case 41: return "tRNS chunk has wrong size for RGB image_";
     case 42: return "tRNS chunk appeared while it was not allowed for this color type";
-    case 43: return "bKGD chunk has wrong size for palette _image";
-    case 44: return "bKGD chunk has wrong size for grayscale _image";
-    case 45: return "bKGD chunk has wrong size for RGB _image";
+    case 43: return "bKGD chunk has wrong size for palette image_";
+    case 44: return "bKGD chunk has wrong size for grayscale image_";
+    case 45: return "bKGD chunk has wrong size for RGB image_";
     case 48: return "empty input buffer given to decoder. Maybe caused by non-existing file?";
     case 49: return "jumped past memory while generating dynamic huffman tree";
     case 50: return "jumped past memory while generating dynamic huffman tree";
@@ -6718,7 +6718,7 @@ const char* lodepng_error_text(unsigned code) {
     tree will have more leaves than symbols after generating it out of the
     given lengths. They call this an oversubscribed dynamic bit lengths tree in zlib.*/
     case 55: return "jumped past tree while generating huffman tree";
-    case 56: return "given output _image colortype or bitdepth not supported for color conversion";
+    case 56: return "given output image_ colortype or bitdepth not supported for color conversion";
     case 57: return "invalid CRC encountered (checking CRC can be disabled)";
     case 58: return "invalid ADLER32 encountered (checking ADLER32 can be disabled)";
     case 59: return "requested color conversion not supported";
@@ -6748,7 +6748,7 @@ const char* lodepng_error_text(unsigned code) {
     case 81: return "lazy matching at pos 0 is impossible";
     case 82: return "color conversion to palette requested while a color isn't in palette, or index out of bounds";
     case 83: return "memory allocation failed";
-    case 84: return "given _image too small to contain all pixels to be encoded";
+    case 84: return "given image_ too small to contain all pixels to be encoded";
     case 86: return "impossible offset in lz77 encoding (internal bug)";
     case 87: return "must provide custom zlib function pointer if LODEPNG_COMPILE_ZLIB is not defined";
     case 88: return "invalid filter strategy given for LodePNGEncoderSettings.filter_strategy";
@@ -6783,7 +6783,7 @@ const char* lodepng_error_text(unsigned code) {
     /*max ICC size limit can be configured in LodePNGDecoderSettings. This error prevents
     unreasonable memory consumption when decoding due to impossibly large ICC profile*/
     case 113: return "ICC profile unreasonably large";
-    case 114: return "sBIT chunk has wrong size for the color type of the _image";
+    case 114: return "sBIT chunk has wrong size for the color type of the image_";
     case 115: return "sBIT value out of range";
   }
   return "unknown error code";

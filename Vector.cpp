@@ -58,25 +58,25 @@ Vector Vector::operator/(float k) {
 }
 
 void Vector::operator+=(const Vector &v) {
-    for (int_fast8_t i = 0; i < 3; ++i) {
+    for (int8_t i = 0; i < 3; ++i) {
         vec_[i] += v.vec_[i];
     }
 }
 
 void Vector::operator-=(const Vector &v) {
-    for (int_fast8_t i = 0; i < 3; ++i) {
+    for (int8_t i = 0; i < 3; ++i) {
         vec_[i] -= v.vec_[i];
     }
 }
 
 void Vector::operator*=(float k) {
-    for (int_fast8_t i = 0; i < 3; ++i) {
+    for (int8_t i = 0; i < 3; ++i) {
         vec_[i] *= k;
     }
 }
 
 void Vector::operator/=(float k) {
-    for (int_fast8_t i = 0; i < 3; ++i) {
+    for (int8_t i = 0; i < 3; ++i) {
         vec_[i] /= k;
     }
 }

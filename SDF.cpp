@@ -45,8 +45,7 @@ Cube::Cube(float pos_x, float pos_y, float pos_z, float a, float b, float side) 
 }
 
 float Cube::get_dist(float pos_x, float pos_y, float pos_z) {
-    return std::max(std::max(std::abs(pos_x - pos_[0]), std::abs(pos_y - pos_[1])), std::abs(pos_z - pos_[2])) -
-           side_ / 2;
+    return std::max(std::max(std::abs(pos_x - pos_[0]), std::abs(pos_y - pos_[1])), std::abs(pos_z - pos_[2])) - side_ / 2;
 }
 
 
