@@ -14,3 +14,9 @@
 508	549	1736966264541567449	raymarching	4324df5b3da904c1
 3	306	1736966298311664588	CMakeFiles/raymarching.dir/Scene.cpp.o	c8b8aad28045f1d7
 307	343	1736966298614686631	raymarching	4324df5b3da904c1
+7	625	1736972268440375510	CMakeFiles/raymarching.dir/Vector.cpp.o	6876f29ef860130
+7	626	1736972268440533793	CMakeFiles/raymarching.dir/SDF.cpp.o	86b3583e8b8ee78b
+7	640	1736972268440680909	CMakeFiles/raymarching.dir/Scene.cpp.o	c8b8aad28045f1d7
+6	751	1736972268439643635	CMakeFiles/raymarching.dir/main.cpp.o	be8b21f0e865d6b3
+6	762	1736972268440180563	CMakeFiles/raymarching.dir/lodepng.cpp.o	af4ac945bfdd6cd4
+762	875	1736972269195453531	raymarching	4324df5b3da904c1

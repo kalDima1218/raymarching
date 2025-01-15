@@ -28,7 +28,7 @@ void Vector::rotate(float a, float b) {
 
 void Vector::normalize() {
     float len = sqrtf(powf(vec_[0], 2) + powf(vec_[1], 2) + powf(vec_[2], 2));
-    for (int32_t i = 0; i < 3; ++i) {
+    for (size_t i = 0; i < 3; ++i) {
         vec_[i] /= len;
     }
 }
@@ -58,25 +58,25 @@ Vector Vector::operator/(float k) {
 }
 
 void Vector::operator+=(const Vector &v) {
-    for (int8_t i = 0; i < 3; ++i) {
+    for (size_t i = 0; i < 3; ++i) {
         vec_[i] += v.vec_[i];
     }
 }
 
 void Vector::operator-=(const Vector &v) {
-    for (int8_t i = 0; i < 3; ++i) {
+    for (size_t i = 0; i < 3; ++i) {
         vec_[i] -= v.vec_[i];
     }
 }
 
 void Vector::operator*=(float k) {
-    for (int8_t i = 0; i < 3; ++i) {
+    for (size_t i = 0; i < 3; ++i) {
         vec_[i] *= k;
     }
 }
 
 void Vector::operator/=(float k) {
-    for (int8_t i = 0; i < 3; ++i) {
+    for (size_t i = 0; i < 3; ++i) {
         vec_[i] /= k;
     }
 }

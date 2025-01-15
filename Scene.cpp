@@ -34,7 +34,7 @@ std::vector<std::vector<unsigned char>> &Scene::render() {
             pos = cam_pos_;
             float dist = 0;
             float delta = sdf_->get_dist(pos);
-            for (int32_t i = 0; i < 100 && dist < 100 && delta > 0.0001; ++i) {
+            for (uint32_t i = 0; i < 100 && dist < 100 && delta > 0.0001; ++i) {
                 dist += delta;
                 pos += ray_dir * delta;
                 delta = sdf_->get_dist(pos);
