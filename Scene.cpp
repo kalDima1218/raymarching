@@ -1,13 +1,13 @@
 #include "Scene.h"
 
-Scene::Scene(int width, int height, float a, float b, const Vector &cam_pos, const Vector &light_pos, const std::shared_ptr<SDF> &sdf, float fov) {
+Scene::Scene(int32_t width, int32_t height, float a, float b, const Vector &cam_pos, const Vector &light_pos, const std::shared_ptr<SDF> &sdf, float fov) {
     width_ = width;
     height_ = height;
     light_pos_ = light_pos;
-    image_ = std::vector<std::vector<unsigned char>>(height_, std::vector<unsigned char>(width_));
     sdf_ = sdf;
     fov_ = fov;
     pixel_size_ = 2 * (tan(fov_ / 2) / static_cast<float>(height));
+    image_ = std::vector<std::vector<unsigned char>>(height_, std::vector<unsigned char>(width_));
     set_preset(cam_pos, a, b);
 }
 
@@ -23,7 +23,7 @@ void Scene::set_preset(const Vector &cam_pos, float a, float b) {
     display_center_ = cam_pos_ + cam_dir_;
 }
 
-std::vector<std::vector<unsigned char>> &Scene::render() {
+const std::vector<std::vector<unsigned char>> &Scene::render() const {
     Vector ray_dir;
     Vector pos;
     Vector light_dir;
@@ -50,4 +50,20 @@ std::vector<std::vector<unsigned char>> &Scene::render() {
         }
     }
     return image_;
+}
+
+int32_t Scene::get_width() const {
+    return width_;
+}
+
+int32_t Scene::get_height() const {
+    return height_;
+}
+
+const Vector &Scene::get_cam_pos() const {
+    return cam_pos_;
+}
+
+const Vector &Scene::get_cam_dir() const {
+    return cam_dir_;
 }

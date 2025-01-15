@@ -37,23 +37,23 @@ float &Vector::operator[](int i) {
     return vec_[i];
 }
 
-float Vector::operator[](int i) const{
+float Vector::operator[](int i) const {
     return vec_[i];
 }
 
-Vector Vector::operator+(const Vector &v) {
+Vector Vector::operator+(const Vector &v) const {
     return {vec_[0] + v.vec_[0], vec_[1] + v.vec_[1], vec_[2] + v.vec_[2]};
 }
 
-Vector Vector::operator-(const Vector &v) {
+Vector Vector::operator-(const Vector &v) const {
     return {vec_[0] - v.vec_[0], vec_[1] - v.vec_[1], vec_[2] - v.vec_[2]};
 }
 
-Vector Vector::operator*(float k) {
+Vector Vector::operator*(float k) const {
     return {vec_[0] * k, vec_[1] * k, vec_[2] * k};
 }
 
-Vector Vector::operator/(float k) {
+Vector Vector::operator/(float k) const {
     return {vec_[0] / k, vec_[1] / k, vec_[2] / k};
 }
 
