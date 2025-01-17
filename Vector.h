@@ -11,9 +11,13 @@ public:
 
     Vector(float x, float y, float z);
 
-    Vector(const Vector &p);
+    Vector(const Vector &v);
 
     explicit Vector(const std::vector<float> &vec);
+
+    ~Vector() = default;
+
+    Vector &operator=(const Vector &v);
 
     void rotate(float a, float b);
 
@@ -27,8 +31,8 @@ public:
     Vector operator*(float k) const;
     Vector operator/(float k) const;
 
-    void operator+=(const Vector &v);
-    void operator-=(const Vector &v);
-    void operator*=(float k);
-    void operator/=(float k);
+    Vector operator+=(const Vector &v);
+    Vector operator-=(const Vector &v);
+    Vector operator*=(float k);
+    Vector operator/=(float k);
 };

@@ -10,12 +10,20 @@ Vector::Vector(float x, float y, float z) : Vector::Vector() {
     vec_[2] = z;
 }
 
-Vector::Vector(const Vector &p) {
-    *this = p;
+Vector::Vector(const Vector &v) {
+    operator=(v);
 }
 
 Vector::Vector(const std::vector<float> &vec) : Vector::Vector() {
     vec_ = vec;
+}
+
+Vector &Vector::operator=(const Vector &v) {
+    if (this == &v){
+        return *this;
+    }
+    vec_ = v.vec_;
+    return *this;
 }
 
 void Vector::rotate(float a, float b) {
@@ -57,26 +65,30 @@ Vector Vector::operator/(float k) const {
     return {vec_[0] / k, vec_[1] / k, vec_[2] / k};
 }
 
-void Vector::operator+=(const Vector &v) {
+Vector Vector::operator+=(const Vector &v) {
     for (size_t i = 0; i < 3; ++i) {
         vec_[i] += v.vec_[i];
     }
+    return *this;
 }
 
-void Vector::operator-=(const Vector &v) {
+Vector Vector::operator-=(const Vector &v) {
     for (size_t i = 0; i < 3; ++i) {
         vec_[i] -= v.vec_[i];
     }
+    return *this;
 }
 
-void Vector::operator*=(float k) {
+Vector Vector::operator*=(float k) {
     for (size_t i = 0; i < 3; ++i) {
         vec_[i] *= k;
     }
+    return *this;
 }
 
-void Vector::operator/=(float k) {
+Vector Vector::operator/=(float k) {
     for (size_t i = 0; i < 3; ++i) {
         vec_[i] /= k;
     }
+    return *this;
 }
