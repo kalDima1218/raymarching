@@ -22,7 +22,7 @@ void image_rendering(const Scene &scene) {
     lodepng::encode(filename, image, w, h);
 }
 
-void console_rendering(Scene scene) {
+void console_rendering(Scene &scene) {
     std::vector<char> chars = {'@', '@', '&', 'B', '9', '#', '$', 'S', 'G', 'W', 'M', 'H', '3', '5', '2', 'A', 'X', '%', 's', 'r', 'i', ';', ':', ',', '.', ' '};
     std::string line;
     std::string clear;
@@ -57,14 +57,14 @@ int main() {
     int32_t w = 128;
     int32_t h = 128;
 
-    std::vector<std::shared_ptr<SDF>> s(3);
-    s[0] = std::make_shared<Sphere>(0, 0, 0, 0, 0, 0.65);
-    s[1] = std::make_shared<Cube>(0, 0, 0, 0, 0, 1);
-    s[2] = std::make_shared<Subtraction>(s[1], s[0]);
+    std::vector<std::unique_ptr<SDF>> s(3);
+    s[0] = std::make_unique<Sphere>(0, 0, 0, 0, 0, 0.65);
+    s[1] = std::make_unique<Cube>(0, 0, 0, 0, 0, 1);
+    s[2] = std::make_unique<Subtraction>(std::move(s[1]), std::move(s[0]));
 
     Vector cam_pos = {-2, -2, 0};
 
-    Scene scene(w, h, 0, -0.7, cam_pos, {-5, 5, 0}, s[2], 1.3);
+    Scene scene(w, h, 0, -0.7, cam_pos, {-5, 5, 0}, std::move(s[2]), 1.3);
 
     image_rendering(scene);
     console_rendering(scene);

@@ -49,10 +49,10 @@ float Cube::get_dist(float pos_x, float pos_y, float pos_z) {
 }
 
 
-Union::Union(const std::shared_ptr<SDF> &obj_1, const std::shared_ptr<SDF> &obj_2) : SDF() {
+Union::Union(std::unique_ptr<SDF> &&obj_1, std::unique_ptr<SDF> &&obj_2) : SDF() {
     obj_.resize(2);
-    obj_[0] = obj_1;
-    obj_[1] = obj_2;
+    std::swap(obj_[0], obj_1);
+    std::swap(obj_[1], obj_2);
 }
 
 float Union::get_dist(float pos_x, float pos_y, float pos_z) {
@@ -60,10 +60,10 @@ float Union::get_dist(float pos_x, float pos_y, float pos_z) {
 }
 
 
-Subtraction::Subtraction(const std::shared_ptr<SDF> &obj_1, const std::shared_ptr<SDF> &obj_2) : SDF() {
+Subtraction::Subtraction(std::unique_ptr<SDF> &&obj_1, std::unique_ptr<SDF> &&obj_2) : SDF() {
     obj_.resize(2);
-    obj_[0] = obj_1;
-    obj_[1] = obj_2;
+    std::swap(obj_[0], obj_1);
+    std::swap(obj_[1], obj_2);
 }
 
 float Subtraction::get_dist(float pos_x, float pos_y, float pos_z) {
@@ -71,10 +71,10 @@ float Subtraction::get_dist(float pos_x, float pos_y, float pos_z) {
 }
 
 
-Intersection::Intersection(const std::shared_ptr<SDF> &obj_1, const std::shared_ptr<SDF> &obj_2) : SDF() {
+Intersection::Intersection(std::unique_ptr<SDF> &&obj_1, std::unique_ptr<SDF> &&obj_2) : SDF() {
     obj_.resize(2);
-    obj_[0] = obj_1;
-    obj_[1] = obj_2;
+    std::swap(obj_[0], obj_1);
+    std::swap(obj_[1], obj_2);
 }
 
 float Intersection::get_dist(float pos_x, float pos_y, float pos_z) {

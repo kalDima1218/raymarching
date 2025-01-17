@@ -14,10 +14,6 @@ Vector::Vector(const Vector &v) {
     operator=(v);
 }
 
-Vector::Vector(const std::vector<float> &vec) : Vector::Vector() {
-    vec_ = vec;
-}
-
 Vector &Vector::operator=(const Vector &v) {
     if (this == &v){
         return *this;

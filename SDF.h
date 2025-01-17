@@ -45,30 +45,30 @@ public:
 
 class Union : public SDF {
 private:
-    std::vector<std::shared_ptr<SDF>> obj_;
+    std::vector<std::unique_ptr<SDF>> obj_;
 
 public:
-    Union(const std::shared_ptr<SDF> &obj_1, const std::shared_ptr<SDF> &obj_2);
+    Union(std::unique_ptr<SDF> &&obj_1, std::unique_ptr<SDF> &&obj_2);
 
     float get_dist(float pos_x, float pos_y, float pos_z) override;
 };
 
 class Subtraction : public SDF {
 private:
-    std::vector<std::shared_ptr<SDF>> obj_;
+    std::vector<std::unique_ptr<SDF>> obj_;
 
 public:
-    Subtraction(const std::shared_ptr<SDF> &obj_1, const std::shared_ptr<SDF> &obj_2);
+    Subtraction(std::unique_ptr<SDF> &&obj_1, std::unique_ptr<SDF> &&obj_2);
 
     float get_dist(float pos_x, float pos_y, float pos_z) override;
 };
 
 class Intersection : public SDF {
 private:
-    std::vector<std::shared_ptr<SDF>> obj_;
+    std::vector<std::unique_ptr<SDF>> obj_;
 
 public:
-    Intersection(const std::shared_ptr<SDF> &obj_1, const std::shared_ptr<SDF> &obj_2);
+    Intersection(std::unique_ptr<SDF> &&obj_1, std::unique_ptr<SDF> &&obj_2);
 
     float get_dist(float pos_x, float pos_y, float pos_z) override;
 };

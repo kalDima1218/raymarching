@@ -1,10 +1,10 @@
 #include "Scene.h"
 
-Scene::Scene(int32_t width, int32_t height, float a, float b, const Vector &cam_pos, const Vector &light_pos, const std::shared_ptr<SDF> &sdf, float fov) {
+Scene::Scene(int32_t width, int32_t height, float a, float b, const Vector &cam_pos, const Vector &light_pos, std::unique_ptr<SDF> &&sdf, float fov) {
     width_ = width;
     height_ = height;
     light_pos_ = light_pos;
-    sdf_ = sdf;
+    std::swap(sdf_, sdf);
     fov_ = fov;
     pixel_size_ = 2 * (tan(fov_ / 2) / static_cast<float>(height));
     image_ = std::vector<std::vector<unsigned char>>(height_, std::vector<unsigned char>(width_));

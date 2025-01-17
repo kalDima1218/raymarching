@@ -13,8 +13,6 @@ public:
 
     Vector(const Vector &v);
 
-    explicit Vector(const std::vector<float> &vec);
-
     ~Vector() = default;
 
     Vector &operator=(const Vector &v);
