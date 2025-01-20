@@ -13,10 +13,6 @@ void SDF::rotate(float a, float b) {
     b_ = b;
 }
 
-float SDF::get_dist(float pos_x, float pos_y, float pos_z) {
-    return 0;
-}
-
 float SDF::get_dist(Vector &pos) {
     return get_dist(pos[0], pos[1], pos[2]);
 }

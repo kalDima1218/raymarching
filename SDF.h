@@ -14,9 +14,11 @@ public:
 
     SDF(float pos_x, float pos_y, float pos_z, float a, float b);
 
+    virtual ~SDF() = default;
+
     void rotate(float a, float b);
 
-    virtual float get_dist(float pos_x, float pos_y, float pos_z);
+    virtual float get_dist(float pos_x, float pos_y, float pos_z) = 0;
 
     float get_dist(Vector &pos);
 
